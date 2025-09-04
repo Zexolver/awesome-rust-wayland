@@ -13,6 +13,8 @@ There are no current plans to apply to the [![Awesome](https://cdn.rawgit.com/si
 > [!NOTE]
 > If you want to contribute, feel free to open a PR.
 
+- To view even more awesome (archived) rust wayland projects, go here ![WARNING-Archived](https://img.shields.io/badge/Archived-yellow?style=for-the-badge&label=WARNING&labelColor=red)
+
 
 TABLE OF CONTENTS
 -----------------
@@ -111,6 +113,7 @@ LIBRARIES
 NOTIFICATIONS
 -------------
 
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [moxnotify](https://github.com/mox-desktop/moxnotify) - Feature-rich hardware-accelerated keyboard driven Wayland notification daemon.
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [SwayOSD](https://github.com/ErikReider/SwayOSD) - A GTK-based OSD window for common actions like volume and Caps Lock
 
 ON-SCREEN KEYBOARDS
