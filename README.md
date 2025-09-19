@@ -97,6 +97,7 @@ IMAGE VIEWING
 LAUNCHERS
 ---------
 
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Animolauncher](https://codeberg.org/AnimoUtils/animolauncher) - GUI for launching applications, written in blazingly fast Rust! 🚀🦀
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Anyrun](https://github.com/anyrun-org/anyrun) - A GTK-based Wayland-native launcher, customizable via CSS
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [kickoff](https://github.com/j0ru/kickoff) - A wlroots-based application launcher
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [sirula](https://github.com/DorianRudolph/sirula) - A simple application launcher for Wayland
