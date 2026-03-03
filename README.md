@@ -123,6 +123,7 @@ NOTIFICATIONS
 ON-SCREEN KEYBOARDS
 -------------------
 
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [squeekkeyboard](https://gitlab.gnome.org/World/Phosh/squeekboard) - An on-screen keyboard for Wayland compositors supporting the `virtual-keyboard-unstable-v1` `and gtk3-layer-shell` protocols
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wkeys](https://github.com/ptazithos/wkeys) - An on-screen keyboard featuring a configurable layout and style for Wayland compositors supporting the `gtk4-layer-shell` protocol
 
 REFERENCE APPLICATIONS
