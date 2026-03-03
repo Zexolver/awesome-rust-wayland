@@ -72,6 +72,7 @@ COMPOSITORS
 -----------
 
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [catacomb](https://github.com/catacombing/catacomb) - A Wayland Mobile Compositor
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [cosmic-comp](https://github.com/pop-os/cosmic-comp) - A Smithay-based Wayland compositor designed for the COSMIC desktop environment
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [fht-compositor](https://github.com/nferhat/fht-compositor) - A dynamic tiling Wayland compositor.
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [fireplace](https://github.com/Drakulix/fireplace) - Modular wayland window manager written in rust
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Jay](https://github.com/mahkoh/jay) - A tiling Wayland compositor inspired by i3wm
