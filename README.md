@@ -189,6 +189,7 @@ WALLPAPER
 WIDGETS (BARS, PANELS, ETC.)
 ----------------------------
 
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [ashell](https://github.com/MalpenZibo/ashell) - A ready to go Wayland status bar for Hyprland and Niri
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Dvvidget](https://github.com/BL-CZY/dvvidget) - A widget system for Wayland compositors implementing the `wlr-layer-shell-unstable-v1` and `gtk4-layer-shell` protocols
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [dynisland](https://github.com/cr3eperall/dynisland) - An extensible bar for wlroots-based Wayland compositors implementing the `gtk4-layer-shell` protocol
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Eww](https://github.com/elkowar/eww) - A standalone widget system that allows for implementing custom widgets in any window manager
