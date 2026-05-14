@@ -1,0 +1,165 @@
+name: Sync Awesome Rust Wayland
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs automatically every Sunday at midnight
+  workflow_dispatch: # Allows you to manually trigger it from the GitHub Actions tab
+
+jobs:
+  sync-rust-projects:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed so the bot can push the updated README to your repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Sync and Filter README
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import os
+          import re
+          import requests
+          import time
+
+          UPSTREAM_URL = "https://raw.githubusercontent.com/rcalixte/awesome-wayland/master/README.md"
+          LOCAL_FILE = "README.md"
+          TOKEN = os.getenv("GITHUB_TOKEN")
+
+          def get_github_language(url):
+              """Uses the GitHub API to check if a repo's primary language is Rust."""
+              match = re.match(r'https?://github\.com/([^/]+)/([^/]+)', url)
+              if not match: return False
+              
+              owner, repo = match.groups()
+              # Clean up any trailing markdown characters
+              repo = re.sub(r'[^a-zA-Z0-9_\-\.]', '', repo)
+              
+              api_url = f"https://api.github.com/repos/{owner}/{repo}"
+              headers = {"Authorization": f"token {TOKEN}"} if TOKEN else {}
+              
+              try:
+                  res = requests.get(api_url, headers=headers)
+                  if res.status_code == 200:
+                      return res.json().get('language') == 'Rust'
+              except Exception:
+                  pass
+              return False
+
+          def is_rust_project(line, url):
+              """Checks the description text first, falls back to GitHub API."""
+              if re.search(r'\brust\b', line, re.IGNORECASE):
+                  return True
+              if TOKEN and url and 'github.com' in url:
+                  return get_github_language(url)
+              return False
+
+          def extract_url(line):
+              match = re.search(r'\[.*?\]\((.*?)\)', line)
+              return match.group(1) if match else None
+
+          print("Downloading upstream README...")
+          upstream_text = requests.get(UPSTREAM_URL).text
+          
+          if not os.path.exists(LOCAL_FILE):
+              print(f"Error: {LOCAL_FILE} not found!")
+              exit(1)
+              
+          with open(LOCAL_FILE, 'r', encoding='utf-8') as f:
+              local_lines = f.read().split('\n')
+
+          # --- 1. Parse your local README to preserve your items ---
+          sections = []
+          current_section = {"title": None, "pre_list": [], "list_items": [], "post_list": []}
+          phase = "pre"
+          
+          for line in local_lines:
+              if re.match(r'^#+ ', line):
+                  sections.append(current_section)
+                  current_section = {"title": line, "pre_list": [], "list_items": [], "post_list": []}
+                  phase = "pre"
+              elif line.startswith('- ['):
+                  phase = "list"
+                  current_section["list_items"].append(line)
+              else:
+                  if phase == "list":
+                      phase = "post"
+                  current_section[phase + "_list"].append(line)
+          sections.append(current_section)
+
+          existing_urls = set()
+          section_map = {}
+          for sec in sections:
+              if sec["title"]:
+                  section_map[sec["title"].strip()] = sec
+              for item in sec["list_items"]:
+                  url = extract_url(item)
+                  if url: existing_urls.add(url)
+
+          # --- 2. Parse Upstream and Filter for Rust ---
+          print("Checking upstream for new Rust projects...")
+          upstream_lines = upstream_text.split('\n')
+          up_current_title = None
+          
+          for line in upstream_lines:
+              if re.match(r'^#+ ', line):
+                  up_current_title = line.strip()
+              elif up_current_title and line.startswith('- ['):
+                  url = extract_url(line)
+                  # If we found a URL we don't already have in our fork
+                  if url and url not in existing_urls:
+                      if is_rust_project(line, url):
+                          print(f"Adding new Rust project: {url}")
+                          if up_current_title in section_map:
+                              section_map[up_current_title]["list_items"].append(line)
+                          else:
+                              # Recreates the section if it was newly added upstream
+                              new_sec = {"title": up_current_title, "pre_list": [], "list_items": [line], "post_list": []}
+                              section_map[up_current_title] = new_sec
+                              sections.append(new_sec)
+                          existing_urls.add(url)
+                          time.sleep(0.1) # Be nice to GitHub API limits
+
+          # --- 3. Rebuild, Alphabetize, and Save ---
+          new_doc_lines = []
+          for sec in sections:
+              if sec["title"] is not None:
+                  new_doc_lines.append(sec["title"])
+              new_doc_lines.extend(sec["pre_list"])
+              
+              if sec["list_items"]:
+                  # Sort alphabetically (case-insensitive)
+                  sorted_items = sorted(sec["list_items"], key=lambda x: x.lower())
+                  new_doc_lines.extend(sorted_items)
+                  
+              new_doc_lines.extend(sec["post_list"])
+              
+          with open(LOCAL_FILE, 'w', encoding='utf-8') as f:
+              f.write('\n'.join(new_doc_lines))
+          print("Sync complete!")
+          EOF
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          
+          # Only commit if the Python script actually found new things and modified the README
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "chore: auto-sync and filter rust projects from upstream"
+            git push
+            echo "Successfully synced new Rust projects!"
+          else
+            echo "No new Rust projects to add."
+          fi
