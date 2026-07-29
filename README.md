@@ -60,7 +60,7 @@ BRIGHTNESS CONTROL
 
 No Wayland-specific requirements, so you can use your Xorg solution of choice to control screen brightness, like [brightnessctl](https://github.com/Hummer12007/brightnessctl), [brillo](https://gitlab.com/cameronnemo/brillo), or just directly manipulate `/sys/class/backlight`.
 
-- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wluma](https://github.com/maximbaz/wluma) - A tool for wlroots-based compositors that automatically adjust screen brightness based on screen contents and ambient light
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wluma](https://github.com/max-baz/wluma) - A tool for wlroots-based compositors that automatically adjust screen brightness based on screen contents and ambient light
 
 CLIPBOARD MANAGERS
 ------------------
@@ -72,10 +72,12 @@ COMPOSITORS
 -----------
 
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [catacomb](https://github.com/catacombing/catacomb) - A Wayland Mobile Compositor
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [cosmic-comp](https://github.com/pop-os/cosmic-comp) - A Smithay-based Wayland compositor designed for the COSMIC desktop environment
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [fht-compositor](https://github.com/nferhat/fht-compositor) - A dynamic tiling Wayland compositor.
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [fireplace](https://github.com/Drakulix/fireplace) - Modular wayland window manager written in rust
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [IonWL](https://codeberg.org/ideasman42/IonWL) - A manual tiling Smithay-based Wayland compositor inspired by Ion3
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Jay](https://github.com/mahkoh/jay) - A tiling Wayland compositor inspired by i3wm
-- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [niri](https://github.com/YaLTeR/niri) - A Smithay-based scrollable tiling Wayland compositor
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [niri](https://github.com/niri-wm/niri) - A Smithay-based scrollable tiling Wayland compositor
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [pinnacle](https://github.com/pinnacle-comp/pinnacle) - A Smithay-based Wayland compositor inspired by AwesomeWM
 
 DISPLAY CONFIGURATION
@@ -102,6 +104,7 @@ LAUNCHERS
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [lucien](https://github.com/Wachamuli/lucien) - Lucien is a refined application launcher tailored for Linux users who demand a premium experience.
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [sirula](https://github.com/DorianRudolph/sirula) - A simple application launcher for Wayland
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [waylauncher](https://github.com/tomipkoskinen/waylauncher) - A GTK-based application launcher implementing the `gtk4-layer-shell` protocol
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [walker](https://github.com/abenz1267/walker) - A GTK-based Wayland-native application runner
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wldash](https://github.com/kennylevinsen/wldash) - A dashboard, launcher, or control panel for Wayland, using the `wlr-layer-shell-unstable-v1` protocol
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [yofi](https://github.com/l4l/yofi) - A minimalistic menu for Wayland-based compositors
 
@@ -145,7 +148,7 @@ SCREENSHOTS
 -----------
 
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [haruhishot](https://github.com/Decodetalkers/haruhishot) - A screenshot utility for wlroots-based Wayland compositors implementing the `wlr-layer-shell-unstable-v1` and `wlr-screencopy-unstable-v1` protocols
-- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Satty](https://github.com/gabm/Satty) - A screenshot annotation tool inspired by Swappy and Flameshot
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Satty](https://github.com/Satty-org/Satty) - A screenshot annotation tool inspired by Swappy and Flameshot
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [shotman](https://git.sr.ht/~whynothugo/shotman) - A screenshot GUI for Wayland compositors implementing `wlr-layer-shell-unstable-v1`, `wlr-screencopy-unstable-v1`, and `single-pixel-buffer-v1` protocols
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Watershot](https://github.com/Kirottu/watershot) - A simple Wayland-native screenshot tool inspired by Flameshot
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [Wayshot](https://git.sr.ht/~shinyzenith/wayshot) - A screenshot tool for wlroots-based compositors implementing `wlr-screencopy-unstable-v1`
@@ -170,11 +173,14 @@ TOOLS
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [waycorner](https://github.com/AndreasBackx/waycorner) - Hot corners for wlroots-based Wayland compositors implementing the `xdg-output-unstable-v1` protocol
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [waylevel](https://git.sr.ht/~shinyzenith/waylevel) - A simple debugging tool which prints Wayland toplevels and other compositor specific information
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [whisper-overlay](https://github.com/oddlama/whisper-overlay) - A tool providing speech-to-text functionality for Wayland compositors implementing `virtual-keyboard-unstable-v1` and `wlr-layer-shell-unstable-v1` protocols
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [windowtolayer](https://gitlab.freedesktop.org/mstoeckl/windowtolayer) - A tool that individually transforms existing Wayland clients using the `xdg-shell` protocol into clients that use `wlr-layer-shell-unstable-v1` instead to render as a wallpaper
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wlprobe](https://github.com/PolyMeilex/wlprobe) - A utility for displaying information about the protocols supported by a Wayland compositor in a JSON format
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wlr-which-key](https://github.com/MaxVerevkin/wlr-which-key) - A keymap manager for wlroots-based Wayland compositors implementing the `wlr-layer-shell-unstable-v1` protocol
 
 WALLPAPER
 ---------
 
+- ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [awww](https://codeberg.org/LGFae/awww) - An animated wallpaper daemon for Wayland, controlled at runtime and implementing the `wlr-layer-shell-unstable-v1` and `xdg-output-unstable-v1` protocols
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [rwpspread](https://github.com/0xk1f0/rwpspread) - A multi-monitor wallpaper utility spanning input wallpapers across all monitors, supporting Wayland compositors implementing `xdg-output-unstable-v1` with integrations for `wpaperd`, `swaybg`, `hyprpaper`, `swaylock`, and `hyprlock`
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [swww](https://github.com/LGFae/swww) - An animated wallpaper daemon for Wayland, controlled at runtime and implementing the `wlr-layer-shell-unstable-v1` and `xdg-output-unstable-v1` protocols
 - ![Rust](https://img.shields.io/badge/rust-%23281c1c.svg?style=plastic&logo=rust&logoColor=fff) [wpaperd](https://github.com/danyspin97/wpaperd) - A wallpaper daemon that shows random wallpapers from a directory and changes them after some time
