@@ -1,0 +1,197 @@
+name: Sync Rust Projects from Upstream
+
+on:
+  schedule:
+    # Run every Monday at 10:00 UTC
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-rust-projects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/rcalixte/awesome-wayland.git || true
+          git fetch upstream master
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Extract and sync Rust projects
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          def extract_rust_entries(content):
+              """Extract all Rust badge entries from README"""
+              pattern = r'- !\[Rust\].*?\n'
+              matches = re.findall(pattern, content)
+              return set(matches)
+
+          def get_section_content(content, section_name):
+              """Extract content between section headers"""
+              section_pattern = rf'^{re.escape(section_name)}\s*\n-+\n(.*?)(?=\n[A-Z\s]+\n-+|\Z)'
+              match = re.search(section_pattern, content, re.MULTILINE | re.DOTALL)
+              if match:
+                  return match.group(1)
+              return ""
+
+          def insert_entry_in_section(content, section_name, entry):
+              """Insert a Rust entry in the correct alphabetical position within a section"""
+              section_pattern = rf'^({re.escape(section_name)}\s*\n-+\n)(.*?)(?=\n[A-Z\s]+\n-+|\Z)'
+              match = re.search(section_pattern, content, re.MULTILINE | re.DOTALL)
+
+              if not match:
+                  return content
+
+              section_header = match.group(1)
+              section_content = match.group(2)
+
+              # Extract project name from entry
+              name_match = re.search(r'\[([^\]]+)\]', entry)
+              if not name_match:
+                  return content
+
+              entry_name = name_match.group(1).lower()
+
+              # Find insertion point (alphabetical order)
+              lines = section_content.split('\n')
+              insert_idx = len(lines)
+
+              for i, line in enumerate(lines):
+                  if line.strip().startswith('- !['):
+                      name_in_line = re.search(r'\[([^\]]+)\]', line)
+                      if name_in_line and name_in_line.group(1).lower() > entry_name:
+                          insert_idx = i
+                          break
+
+              lines.insert(insert_idx, entry)
+              new_section_content = '\n'.join(lines)
+
+              return re.sub(section_pattern, section_header + new_section_content, content, flags=re.MULTILINE | re.DOTALL)
+
+          # Read current and upstream READMEs
+          current_readme = Path('README.md').read_text()
+
+          try:
+              upstream_readme = subprocess.check_output(
+                  ['git', 'show', 'upstream/master:README.md'],
+                  text=True
+              )
+          except subprocess.CalledProcessError:
+              print("Could not fetch upstream README")
+              exit(1)
+
+          # Extract Rust entries
+          current_rust = extract_rust_entries(current_readme)
+          upstream_rust = extract_rust_entries(upstream_readme)
+
+          # Find new entries
+          new_entries = upstream_rust - current_rust
+
+          if not new_entries:
+              print("✓ No new Rust projects found")
+              exit(0)
+
+          print(f"Found {len(new_entries)} new Rust project(s)")
+
+          # Determine which section each entry belongs to
+          section_map = {
+              'BINDINGS': 'BINDINGS',
+              'BREAK NOTIFIERS': 'BREAK NOTIFIERS',
+              'BRIGHTNESS CONTROL': 'BRIGHTNESS CONTROL',
+              'CLIPBOARD MANAGERS': 'CLIPBOARD MANAGERS',
+              'COMPOSITORS': 'COMPOSITORS',
+              'DISPLAY CONFIGURATION': 'DISPLAY CONFIGURATION',
+              'EMULATION': 'EMULATION',
+              'IMAGE VIEWING': 'IMAGE VIEWING',
+              'LAUNCHERS': 'LAUNCHERS',
+              'LIBRARIES': 'LIBRARIES',
+              'NOTIFICATIONS': 'NOTIFICATIONS',
+              'ON-SCREEN KEYBOARDS': 'ON-SCREEN KEYBOARDS',
+              'REFERENCE APPLICATIONS': 'REFERENCE APPLICATIONS',
+              'SCREEN LOCKING': 'SCREEN LOCKING',
+              'SCREENCASTS': 'SCREENCASTS',
+              'SCREENSHOTS': 'SCREENSHOTS',
+              'SESSION MANAGEMENT': 'SESSION MANAGEMENT',
+              'THEMING': 'THEMING',
+              'TOOLS': 'TOOLS',
+              'WALLPAPER': 'WALLPAPER',
+              'WIDGETS (BARS, PANELS, ETC.)': 'WIDGETS (BARS, PANELS, ETC.)',
+              'WINDOW MANAGERS': 'WINDOW MANAGERS'
+          }
+
+          updated_readme = current_readme
+          added_entries = []
+
+          for entry in sorted(new_entries):
+              # Find which section this entry belongs to in upstream
+              for section in section_map.keys():
+                  section_content = get_section_content(upstream_readme, section)
+                  if entry in section_content:
+                      print(f"Adding {entry.split('[')[1].split(']')[0]} to {section}")
+                      updated_readme = insert_entry_in_section(updated_readme, section, entry)
+                      added_entries.append(entry.split('[')[1].split(']')[0])
+                      break
+
+          # Write updated README
+          Path('README.md').write_text(updated_readme)
+
+          # Set output for next step
+          with open('ENTRIES_ADDED.txt', 'w') as f:
+              for entry in added_entries:
+                  f.write(entry + '\n')
+
+          print(f"✓ Successfully added {len(added_entries)} new Rust project(s)")
+          PYTHON_SCRIPT
+
+      - name: Check if changes were made
+        id: check_changes
+        run: |
+          if git diff --quiet README.md; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: add new Rust projects from upstream sync'
+          title: 'chore: sync new Rust projects from upstream'
+          body: |
+            ## Automated Upstream Sync
+
+            This PR contains new Rust-based Wayland projects from the upstream [rcalixte/awesome-wayland](https://github.com/rcalixte/awesome-wayland) repository.
+
+            ### New Projects Added
+            ${{ steps.extract_entries.outputs.entries }}
+
+            ### Details
+            - Only Rust-based projects are included
+            - Entries are placed in alphabetical order within their respective sections
+            - All links and descriptions are from upstream
+
+            ---
+            *This is an automated sync performed by the [sync-rust-upstream workflow](.github/workflows/sync-rust-upstream.yml)*
+          branch: chore/sync-rust-upstream-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            automation
+            upstream-sync
+            rust
